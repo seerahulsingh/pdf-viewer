@@ -1,0 +1,107 @@
+<div class="container">
+  <h2><!-- Hello {{chance}} --></h2> 
+  <div id="pdf-block" onScroll="detectPage(this)">
+    {{#each images}}
+      <div class="overlay">
+        <img src={{this}} class="pdf-page" />
+        <div class="cover"></div>
+      </div>
+    {{/each}}
+
+    <div id="pdf-actions">
+      <div class="zoom-in" onClick="zoomIn(this)"> + </div>
+      <div class="zoom-out" onClick="zoomOut(this)"> - </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  body {
+    margin: 0;
+  }
+
+  #pdf-block {
+    width: 100%;
+    background: #4f4f4f;
+    text-align: center;
+    margin: auto;
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  #pdf-block div {
+    padding: 1px;
+  }
+
+  #pdf-block .pdf-page {
+    width: 65%;
+    transition: all 0.4s ease-in-out;
+  }
+
+  #pdf-actions {
+    position: fixed;
+    bottom: 10;
+    right: 30;
+  }
+
+  #pdf-actions div {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background: #4f4f4f;
+    color: #ffffff;
+    border: 2px solid #cdcdcd;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 12px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+</style>
+
+<script type="text/javascript">
+  function zoomIn(el) {
+    var targetEls = document.getElementsByClassName('pdf-page')
+    var zoom = targetEls[0].style.width
+    var newZoom
+
+    if (zoom) {
+      newZoom = parseInt(zoom, 10) + 15 + '%'
+    } else {
+      newZoom = '80%'
+    }
+
+    for (i = 0; i < targetEls.length; i++) {
+      targetEls[i].style.width = newZoom
+    }
+  }
+
+  function zoomOut(el) {
+    var targetEls = document.getElementsByClassName('pdf-page')
+    var zoom = targetEls[0].style.width
+    var newZoom
+
+    if (zoom) {
+      newZoom = parseInt(zoom, 10) - 15 + '%'
+    } else {
+      newZoom = '50%'
+    }
+
+    for (i = 0; i < targetEls.length; i++) {
+      targetEls[i].style.width = newZoom
+    }
+  }
+
+  var currentPage = 1;
+  function detectPage(el) {
+    var totalScrollHeight = el.scrollHeight
+    var perPageHeight = totalScrollHeight / 14
+    var currentScroll = el.scrollTop / perPageHeight
+    var pageNumber = parseInt(currentScroll) + 1;
+    if (currentPage !== pageNumber) {
+      console.log("Current Page", pageNumber)
+      currentPage = pageNumber
+    }
+  }
+</script>
